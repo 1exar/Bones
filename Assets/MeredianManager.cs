@@ -36,4 +36,33 @@ public class MeredianManager : MonoBehaviour
         meredianListDropDown.AddOptions(options);
     }
 
+    public void CheckForMeredian(Meredian meredian)
+    {
+        bool has = false;
+        int id = 0;
+        foreach (Meredian m in meredians)
+        {
+            if (m == meredian)
+            {
+                has = true;
+                break;
+            }
+
+            id++;
+        }
+
+        if (has)
+        {
+            meredianListDropDown.value = id;
+        }
+    }
+
+    public void OnSelectMeredian()
+    {
+        if (PointEditor.pe.activePoint)
+        {
+            PointEditor.pe.activePoint.GetComponent<Point>().meredian = meredians[meredianListDropDown.value];
+        }
+    }
+    
 }

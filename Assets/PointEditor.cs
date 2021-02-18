@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class PointEditor : MonoBehaviour
 {
     private List<Point> points = new List<Point>(); //список точек на данной модели, с которыми мы счас работаем
-    private GameObject activePoint; //активная точка, которую мы перемещаем
+    public GameObject activePoint; //активная точка, которую мы перемещаем
     public Material white, red;// материалы(цвет точек)
 
     public static PointEditor pe;//ссылка на экземпляр данного класса
@@ -18,7 +18,12 @@ public class PointEditor : MonoBehaviour
     public GameObject pointPrefab;//префаб создаваемой точки
 
     public MethodManager methodManager;//ссылка на класс управления методами
+    public MeredianManager meredianManager;
     public ModelControler modelControler;
+
+    public InputField pointName;
+    public InputField pointDescription;
+
     public void ChangePositionX()//меняем положение точки по X
     {
         if (activePoint)
@@ -58,6 +63,7 @@ public class PointEditor : MonoBehaviour
             activePoint.GetComponent<MeshRenderer>().material = white;
         }
 
+        
         activePoint = newPoint;
         activePoint.GetComponent<MeshRenderer>().material = red;
 
@@ -66,6 +72,16 @@ public class PointEditor : MonoBehaviour
         yS.value = activePoint.transform.position.y;
         zS.value = activePoint.transform.localPosition.z;
 
+        Point point = activePoint.GetComponent<Point>();
+        
+        pointName.text = point._name;
+        pointDescription.text = point.description;
+
+        if (point.meredian != null)
+        {
+            meredianManager.CheckForMeredian(point.meredian);      
+        }
+        
     }
 
     public void AddNewPoint()//создаем новую точку
@@ -84,6 +100,22 @@ public class PointEditor : MonoBehaviour
             points.Remove(point);
             modelControler.curentModel.GetComponent<Model>().points.Remove(point);
             Destroy(activePoint);
+        }
+    }
+
+    public void ChangePointName()
+    {
+        if(activePoint)
+        {
+            activePoint.GetComponent<Point>()._name = pointName.text;
+        }
+    }
+
+    public void ChangePointDescription()
+    {
+        if (activePoint)
+        {
+            activePoint.GetComponent<Point>().description = pointDescription.text;
         }
     }
 }

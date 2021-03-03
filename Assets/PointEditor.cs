@@ -46,8 +46,10 @@ public class PointEditor : MonoBehaviour
     {
         if (activePoint)
         {
-            Vector3 p = activePoint.transform.localPosition;
-            activePoint.gameObject.transform.localPosition = new Vector3(p.x, p.y, zS.value);
+           // activePoint.transform.parent = null;
+          //  Vector3 p = activePoint.transform.localPosition;
+          //  activePoint.gameObject.transform.localPosition = new Vector3(p.x, p.y, zS.value);
+          //  activePoint.transform.parent = modelControler.curentModel.transform;
         }
     }
 
@@ -73,15 +75,30 @@ public class PointEditor : MonoBehaviour
         zS.value = activePoint.transform.localPosition.z;
 
         Point point = activePoint.GetComponent<Point>();
-        
-        pointName.text = point._name;
-        pointDescription.text = point.description;
 
-        if (point.meredian != null)
+        if (point._name != "")
+        {
+            pointName.text = point._name;
+        }
+        else
+        {
+            pointName.text = "";
+        }
+
+        if (point.description != "")
+        {
+            pointDescription.text = point.description;
+        }
+        else
+        {
+            pointDescription.text = "";
+        }
+
+        if (point.meredian.name != "")
         {
             meredianManager.CheckForMeredian(point.meredian);      
         }
-        
+
     }
 
     public void AddNewPoint()//создаем новую точку
@@ -118,4 +135,42 @@ public class PointEditor : MonoBehaviour
             activePoint.GetComponent<Point>().description = pointDescription.text;
         }
     }
+
+    public void SavePoints()
+    {
+        List<PointData> points = new List<PointData>();
+        foreach (var point in modelControler.curentModel.GetComponent<Model>().points)
+        {
+            PointData p = new PointData(point.posX, point.posY, point.posZ, point._name, point.description, point.meredian);
+            points.Add(p);
+        }
+
+        SavedPoints data = new SavedPoints();
+        data.points = points;
+        string savepoints = JsonUtility.ToJson(data);
+        PlayerPrefs.SetString("data", savepoints);
+    }
+
+    public void LoadPoints()
+    {
+        modelControler.curentModel.GetComponent<Model>().ClearPoints();
+        
+        SavedPoints data = JsonUtility.FromJson<SavedPoints>(PlayerPrefs.GetString("data"));
+        foreach (var point in data.points)
+        {
+            var p = Instantiate(pointPrefab, modelControler.curentModel.transform);
+            Vector3 pos = new Vector3(point.x, point.y, point.z);
+            p.transform.position = pos;
+            Point p_ = p.GetComponent<Point>();
+            p_._name = point.pointName;
+            p_.description = point.pointDescription;
+            p_.meredian = point.meredian;
+            modelControler.curentModel.GetComponent<Model>().points.Add(p_);
+        }
+    }
+}
+[Serializable]
+public class SavedPoints
+{
+    public List<PointData> points = new List<PointData>();
 }

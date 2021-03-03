@@ -7,6 +7,9 @@ using UnityEngine.UI;
 public class SaveAndLoad : MonoBehaviour
 {
 
-
+    public void SaveCurentMethod()
+    {
+        
+    }
 
 }

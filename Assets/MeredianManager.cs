@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,7 +26,7 @@ public class MeredianManager : MonoBehaviour
         RefreshDropdownOptions();
     }
 
-    private void RefreshDropdownOptions()//обновить список мередиан
+    public void RefreshDropdownOptions()//обновить список мередиан
     {
         meredianListDropDown.ClearOptions();
         List<string> options = new List<string>();
@@ -42,7 +43,7 @@ public class MeredianManager : MonoBehaviour
         int id = 0;
         foreach (Meredian m in meredians)
         {
-            if (m == meredian)
+            if (m.name == meredian.name)
             {
                 has = true;
                 break;
@@ -64,5 +65,9 @@ public class MeredianManager : MonoBehaviour
             PointEditor.pe.activePoint.GetComponent<Point>().meredian = meredians[meredianListDropDown.value];
         }
     }
-    
+
+    public void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Z)) OnSelectMeredian();
+    }
 }

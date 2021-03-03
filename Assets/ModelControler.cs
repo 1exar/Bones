@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class ModelControler : MonoBehaviour
@@ -10,6 +11,8 @@ public class ModelControler : MonoBehaviour
     [SerializeField]
     public List<Model> models = new List<Model>();
 
+    public Slider rotatSlider;
+    
     public void ChooseNewModel(int modelId)//выбрать новую модель из списка доступтных
     {
         HideAllModels();
@@ -23,6 +26,11 @@ public class ModelControler : MonoBehaviour
         {
             model.gameObject.SetActive(false);
         }
+    }
+
+    public void Rotate()
+    {
+        //  curentModel.transform.rotation = Quaternion.Euler(0, rotatSlider.value, 0);
     }
 
 }

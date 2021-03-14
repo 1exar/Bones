@@ -6,9 +6,10 @@ using UnityEngine.UI;
 
 public class PointEditor : MonoBehaviour
 {
-    private List<Point> points = new List<Point>(); //список точек на данной модели, с которыми мы счас работаем
+    [SerializeField]
+    public List<Point> points = new List<Point>(); //список точек на данной модели, с которыми мы счас работаем
     public GameObject activePoint; //активная точка, которую мы перемещаем
-    public Material white, red;// материалы(цвет точек)
+    public Material white, red, green;// материалы(цвет точек)
 
     public static PointEditor pe;//ссылка на экземпляр данного класса
 
@@ -24,6 +25,13 @@ public class PointEditor : MonoBehaviour
     public InputField pointName;
     public InputField pointDescription;
 
+    public Text desc;
+
+    public Dropdown pointsDrop;
+    public List<Point> pointsList;
+
+    public bool viewMode;
+    
     public void ChangePositionX()//меняем положение точки по X
     {
         if (activePoint)
@@ -64,7 +72,6 @@ public class PointEditor : MonoBehaviour
         {
             activePoint.GetComponent<MeshRenderer>().material = white;
         }
-
         
         activePoint = newPoint;
         activePoint.GetComponent<MeshRenderer>().material = red;
@@ -87,20 +94,64 @@ public class PointEditor : MonoBehaviour
 
         if (point.description != "")
         {
-            pointDescription.text = point.description;
+            if (!viewMode)
+            {
+                pointDescription.text = point.description;
+            }
+            else
+            {
+                desc.text = point.description;
+            }
         }
         else
         {
-            pointDescription.text = "";
+            if (!viewMode)
+            {
+                pointDescription.text = "";
+            }
+            else
+            {
+                desc.text = "";
+            }
         }
 
         if (point.meredian.name != "")
         {
-            meredianManager.CheckForMeredian(point.meredian);      
+            meredianManager.CheckForMeredian(point.meredian, point._name);
         }
 
+        if (viewMode)
+        {
+            CheckPointMeredian(activePoint.GetComponent<Point>().meredian.name);
+        }
     }
 
+    public void CheckPointMeredian(string merName)
+    {
+        pointsList.Clear();
+        foreach (Point p in points)
+        {
+            if (p.meredian.name == merName)
+            {
+                pointsList.Add(p);
+            }
+        }
+        pointsDrop.ClearOptions();
+        List<string> options = new List<string>();
+        options.Clear();
+        foreach(Point p in pointsList)
+        {
+            options.Add(p._name);
+        }
+        pointsDrop.AddOptions(options);
+    }
+
+    public void OnPointChoesen()
+    {
+        pointsList[pointsDrop.value].gameObject.name = "fgjilsdcjfglksdjfgikls";
+        NewActivePoint(pointsList[pointsDrop.value].gameObject);
+    }
+    
     public void AddNewPoint()//создаем новую точку
     {
         var pointGameObject = Instantiate(pointPrefab, modelControler.curentModel.transform);

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,8 +18,9 @@ public class MethodManager : MonoBehaviour
     public GameObject[] models;
 
     public InputField saveString;
-    
-    string text = System.IO.File.ReadAllText(@"C:\save.txt");
+
+    static readonly string textFile = @"C:\Save\SaveStringData\save.txt";
+    private string text;
     
     public string saveData;
     public void CreateNewMethod()
@@ -111,6 +114,7 @@ public class MethodManager : MonoBehaviour
                 Vector3 pos = new Vector3(point.x, point.y, point.z);
                 p.transform.position = pos;
                 Point point_ = p.GetComponent<Point>();
+                PointEditor.pe.points.Add(point_);
                 point_._name = point.pointName;
                 point_.description = point.pointDescription;
                 point_.meredian = point.meredian;
@@ -121,6 +125,8 @@ public class MethodManager : MonoBehaviour
 
     public void Start()
     {
+        //text = File.ReadAllText(Resources.Load<TextAsset>("save.txt"));
+        text = Resources.Load<TextAsset>("save").text;
         print(text.Length);
         Load();
        // StartCoroutine(AutoSave());

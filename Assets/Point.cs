@@ -8,8 +8,7 @@ public class Point : MonoBehaviour
 
     public float posX, posY, posZ;
     public string _name;
-    [SerializeField]
-    public Meredian meredian;
+    [SerializeField] public Meredian meredian;
     public string description;
 
     public void OnMouseDown()
@@ -39,16 +38,6 @@ public class Point : MonoBehaviour
         }
     }
 
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Keypad1)) _name = "1";
-        if (Input.GetKeyDown(KeyCode.Keypad2)) _name = "1a";
-        if (Input.GetKeyDown(KeyCode.Keypad3)) _name = "1b";
-        if (Input.GetKeyDown(KeyCode.Keypad4)) _name = "2";
-        if (Input.GetKeyDown(KeyCode.Keypad5)) _name = "2a";
-        if (Input.GetKeyDown(KeyCode.Keypad6)) _name = "3";
-        if (Input.GetKeyDown(KeyCode.Keypad7)) _name = "4";
-    }
 }
 [Serializable]
 public class PointData

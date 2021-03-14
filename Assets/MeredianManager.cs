@@ -11,6 +11,8 @@ public class MeredianManager : MonoBehaviour
     public InputField meredianNameField;//строка ввода названия мередианы
     public Dropdown meredianListDropDown;//выпадающий список мередиан
 
+    public bool viewMode;
+    
     public void CreateNewMeredian()//создать новую мередиану
     {
         string meredianName = meredianNameField.text;
@@ -37,7 +39,7 @@ public class MeredianManager : MonoBehaviour
         meredianListDropDown.AddOptions(options);
     }
 
-    public void CheckForMeredian(Meredian meredian)
+    public void CheckForMeredian(Meredian meredian, string namePoint)
     {
         bool has = false;
         int id = 0;
@@ -51,7 +53,6 @@ public class MeredianManager : MonoBehaviour
 
             id++;
         }
-
         if (has)
         {
             meredianListDropDown.value = id;
@@ -60,9 +61,16 @@ public class MeredianManager : MonoBehaviour
 
     public void OnSelectMeredian()
     {
-        if (PointEditor.pe.activePoint)
+        if (!viewMode)
         {
-            PointEditor.pe.activePoint.GetComponent<Point>().meredian = meredians[meredianListDropDown.value];
+            if (PointEditor.pe.activePoint)
+            {
+                PointEditor.pe.activePoint.GetComponent<Point>().meredian = meredians[meredianListDropDown.value];
+            }
+        }
+        else
+        {
+            PointEditor.pe.CheckPointMeredian(meredians[meredianListDropDown.value].name);
         }
     }
 

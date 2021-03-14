@@ -29,8 +29,8 @@ public class ModelControler : MonoBehaviour
     }
 
     public void Rotate()
-    {
-        //  curentModel.transform.rotation = Quaternion.Euler(0, rotatSlider.value, 0);
+    { 
+        curentModel.transform.rotation = Quaternion.Euler(0, rotatSlider.value, 0);
     }
 
 }
